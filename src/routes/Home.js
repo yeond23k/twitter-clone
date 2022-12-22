@@ -1,5 +1,6 @@
 import Tweet from "components/Tweet";
-import { dbService } from "fbase";
+import { v4 as uuidv4 } from "uuid";
+import { dbService, storageService } from "fbase";
 import { useEffect, useState } from "react";
 
 const Home = ({ userObj }) => {
@@ -20,12 +21,15 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    await dbService.collection("tweets").add({
-      text: tweet,
-      createdAt: Date.now(),
-      creatorId: userObj.uid,
-    });
-    setTweet("");
+    const fireRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
+    const response = await fireRef.putString(attachment, "data_url");
+    console.log(response);
+    // await dbService.collection("tweets").add({
+    //   text: tweet,
+    //   createdAt: Date.now(),
+    //   creatorId: userObj.uid,
+    // });
+    // setTweet("");
   };
 
   const onChange = (event) => {
@@ -67,7 +71,7 @@ const Home = ({ userObj }) => {
         <input type="submit" value="Tweet" />
         {attachment && (
           <div>
-            <img src={attachment} width="50px" height="50px" />
+            <img alt="" src={attachment} width="50px" height="50px" />
             <button onClick={onClearAttachment}>Clear</button>
           </div>
         )}
