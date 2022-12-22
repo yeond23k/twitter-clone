@@ -21,15 +21,25 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const fireRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
-    const response = await fireRef.putString(attachment, "data_url");
-    console.log(response);
-    // await dbService.collection("tweets").add({
-    //   text: tweet,
-    //   createdAt: Date.now(),
-    //   creatorId: userObj.uid,
-    // });
-    // setTweet("");
+    let attachmentUrl = "";
+    if (attachment !== "") {
+      const attachmentRef = storageService
+        .ref()
+        .child(`${userObj.uid}/${uuidv4()}`);
+      const response = await attachmentRef.putString(attachment, "data_url");
+      attachmentUrl = await response.ref.getDownloadURL();
+    }
+
+    const tweetObj = {
+      text: tweet,
+      createdAt: Date.now(),
+      creatorId: userObj.uid,
+      attachmentUrl,
+    };
+
+    await dbService.collection("tweets").add(tweetObj);
+    setTweet("");
+    setAttachment("");
   };
 
   const onChange = (event) => {
