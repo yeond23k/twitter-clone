@@ -1,5 +1,40 @@
 import { authService } from "fbase";
 import { useState } from "react";
+import styled from "styled-components";
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 320px;
+`;
+const Input = styled.input`
+  padding: 10px;
+  border-radius: 30px;
+  max-width: 320px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  background-color: rgba(255, 255, 255, 1);
+  color: black;
+`;
+const Submit = styled.input`
+  border-radius: 30px;
+  padding: 10px;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: white;
+  background-color: #04aaff;
+  cursor: pointer;
+`;
+const LinkButton = styled.span`
+  cursor: pointer;
+  text-decoration: underline;
+  color: #04aaff;
+  padding-top: 20px;
+  padding-bottom: 40px;
+`;
 
 const AuthForm = () => {
   const toggleAccount = () => setNewAccount((prev) => !prev);
@@ -43,8 +78,8 @@ const AuthForm = () => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <input
+      <Form onSubmit={onSubmit}>
+        <Input
           name="email"
           type="text"
           placeholder="Email"
@@ -52,7 +87,7 @@ const AuthForm = () => {
           value={email}
           onChange={onChange}
         />
-        <input
+        <Input
           name="password"
           type="password"
           placeholder="Password"
@@ -60,15 +95,15 @@ const AuthForm = () => {
           value={password}
           onChange={onChange}
         />
-        <input
+        <Submit
           type="submit"
           value={newAccount ? "Create Account" : "Sign In"}
         />
         {error}
-      </form>
-      <span onClick={toggleAccount}>
+      </Form>
+      <LinkButton onClick={toggleAccount}>
         {newAccount ? "Sign In" : "Create Account"}
-      </span>
+      </LinkButton>
     </>
   );
 };
